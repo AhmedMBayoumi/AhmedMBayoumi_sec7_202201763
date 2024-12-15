@@ -1,0 +1,232 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    input, button {
+        margin: 5px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+
+<body>
+    <h1>Book Library</h1>
+
+    <h2>Add a New Book</h2>
+    <form id="addBookForm">
+        <label for="title">Title: </label>
+        <input type="text" id="title" name="title" required>
+        <label for="author">Author: </label>
+        <input type="text" id="author" name="author" required>
+        <label for="published_year">Published Year: </label>
+        <input type="number" id="published_year" name="published_year" required>
+        <label for="isbn">ISBN: </label>
+        <input type="text" id="isbn" name="isbn" required>
+        <label for="genre">Genre: </label>
+        <input type="text" id="genre" name="genre">
+        <button type="submit">Add Book</button>
+    </form>
+
+    <h2>Edit Book</h2>
+    <form id="editBookForm" style="display: none;">
+        <label for="editTitle">Title: </label>
+        <input type="text" id="editTitle" name="title">
+        <label for="editAuthor">Author: </label>
+        <input type="text" id="editAuthor" name="author">
+        <label for="editPublishedYear">Published Year: </label>
+        <input type="number" id="editPublishedYear" name="published_year">
+        <label for="editGenre">Genre: </label>
+        <input type="text" id="editGenre" name="genre">
+        <input type="hidden" id="editIsbn" name="isbn">
+        <button type="submit">Update Book</button>
+    </form>
+
+    <h2>Search Books</h2>
+    <label for="searchAuthor">Author: </label>
+    <input type="text" id="searchAuthor">
+    <label for="searchYear">Published Year: </label>
+    <input type="number" id="searchYear">
+    <label for="searchGenre">Genre: </label>
+    <input type="text" id="searchGenre">
+    <button onclick="searchBooks()">Search</button>
+
+    <h2>Delete a Book</h2>
+    <form id="deleteBookForm">
+        <label for="deleteIsbn">ISBN: </label>
+        <input type="text" id="deleteIsbn" name="isbn" required>
+        <button type="submit">Delete Book</button>
+    </form>
+
+    <h2>Books List</h2>
+    <table id="booksTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>ISBN</th>
+                <th>Genre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="booksList"></tbody>
+    </table>
+
+    <script>
+        const booksList = document.getElementById('booksList');
+        const addBookForm = document.getElementById('addBookForm');
+        const editBookForm = document.getElementById('editBookForm');
+        const editTitle = document.getElementById('editTitle');
+        const editAuthor = document.getElementById('editAuthor');
+        const editPublishedYear = document.getElementById('editPublishedYear');
+        const editGenre = document.getElementById('editGenre');
+        const editIsbn = document.getElementById('editIsbn');
+
+        // Fetch and display books
+        function fetchBooks() {
+            fetch('/books')
+                .then(response => response.json())
+                .then(books => {
+                    booksList.innerHTML = '';
+                    books.forEach(book => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.published_year}</td>
+                            <td>${book.isbn}</td>
+                            <td>${book.genre || ''}</td>
+                            <td>
+                                <button onclick="editBook('${book.isbn}')">Edit</button>
+                                <button onclick="deleteBook('${book.isbn}')">Delete</button>
+                            </td>
+                        `;
+                        booksList.appendChild(row);
+                    });
+                });
+        }
+
+        // Add a new book
+        addBookForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const newBook = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                published_year: document.getElementById('published_year').value,
+                isbn: document.getElementById('isbn').value,
+                genre: document.getElementById('genre').value
+            };
+
+            fetch('/books', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newBook)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchBooks();  // Refresh the list
+                addBookForm.reset();
+            });
+        });
+
+        // Edit a book
+        function editBook(isbn) {
+            fetch(`/books/${isbn}`)
+                .then(response => response.json())
+                .then(book => {
+                    editTitle.value = book.title;
+                    editAuthor.value = book.author;
+                    editPublishedYear.value = book.published_year;
+                    editGenre.value = book.genre || '';
+                    editIsbn.value = book.isbn;
+
+                    // Show the edit form
+                    editBookForm.style.display = 'block';
+                });
+        }
+
+        // Update a book
+        editBookForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const updatedBook = {
+                title: editTitle.value,
+                author: editAuthor.value,
+                published_year: editPublishedYear.value,
+                genre: editGenre.value
+            };
+
+            fetch(`/books/${editIsbn.value}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedBook)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchBooks();  // Refresh the list
+                editBookForm.reset();
+                editBookForm.style.display = 'none';  // Hide the edit form
+            });
+        });
+
+        // Delete a book
+        function deleteBook(isbn) {
+            fetch(`/books/${isbn}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchBooks();  // Refresh the list
+            });
+        }
+
+        // Search books
+        function searchBooks() {
+            const author = document.getElementById('searchAuthor').value;
+            const publishedYear = document.getElementById('searchYear').value;
+            const genre = document.getElementById('searchGenre').value;
+
+            let query = '?';
+            if (author) query += `author=${author}&`;
+            if (publishedYear) query += `published_year=${publishedYear}&`;
+            if (genre) query += `genre=${genre}&`;
+
+            fetch(`/books/search${query}`)
+                .then(response => response.json())
+                .then(books => {
+                    booksList.innerHTML = '';
+                    books.forEach(book => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.published_year}</td>
+                            <td>${book.isbn}</td>
+                            <td>${book.genre || ''}</td>
+                            <td>
+                                <button onclick="editBook('${book.isbn}')">Edit</button>
+                                <button onclick="deleteBook('${book.isbn}')">Delete</button>
+                            </td>
+                        `;
+                        booksList.appendChild(row);
+                    });
+                });
+        }
+
+        // Initial fetch
+        fetchBooks();
+    </script>
+</body>
+

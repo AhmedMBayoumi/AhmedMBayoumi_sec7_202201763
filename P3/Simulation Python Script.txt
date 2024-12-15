@@ -1,0 +1,48 @@
+PS C:\Ahmed Bayoumi\Coding\SWE\AhmedBayoumi_sec7_202201763> python -u "c:\Ahmed Bayoumi\Coding\SWE\AhmedBayoumi_sec7_202201763\P3\completeSystem.py"
+Welcome to the Pizza Restaurant!
+
+Choose your pizza:
+1. Margherita ($10)
+2. Pepperoni ($15)
+0 => to finish order
+Enter a number: 1
+
+Available toppings:
+1. Cheese ($1.0)
+2. Olives ($1.5)
+3. Mushrooms ($2.0)
+4. Finish adding toppings
+Enter a number: 1
+
+Available toppings:
+1. Cheese ($1.0)
+2. Olives ($1.5)
+3. Mushrooms ($2.0)
+4. Finish adding toppings
+Enter a number: 2
+
+Available toppings:
+1. Cheese ($1.0)
+2. Olives ($1.5)
+3. Mushrooms ($2.0)
+4. Finish adding toppings
+Enter a number: 4
+
+Choose your pizza:
+1. Margherita ($10)
+2. Pepperoni ($15)
+0 => to finish order
+Enter a number: 0
+
+Your full order:
+Description: Margherita + Cheese + Olives
+Total cost: $12.50
+
+Choose a payment method:
+1. PayPal
+2. Credit Card
+Enter the number of your choice: 1
+Paid $12.50 using PayPal. Payment Successful!
+
+Remaining Inventory:
+{'Margherita': 100, 'Pepperoni': 100, 'Cheese': 99, 'Olives': 99, 'Mushrooms': 100}

@@ -1,0 +1,527 @@
+{
+	"info": {
+		"_postman_id": "8caafc78-0c4e-4ddd-9e8e-fac2a2e1f166",
+		"name": "A swagger API",
+		"description": "powered by Flasgger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39033168"
+	},
+	"item": [
+		{
+			"name": "/",
+			"item": [
+				{
+					"name": "the main HTML page.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Returns the index.html page",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "//",
+									"path": [
+										"",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "books",
+			"item": [
+				{
+					"name": "search",
+					"item": [
+						{
+							"name": "Search for books by author, published year, or genre.",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/books/search?author=<string>&published_year=<integer>&genre=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"search"
+									],
+									"query": [
+										{
+											"key": "author",
+											"value": "<string>",
+											"description": "The author of the book to search for"
+										},
+										{
+											"key": "published_year",
+											"value": "<integer>",
+											"description": "The published year of the book to search for"
+										},
+										{
+											"key": "genre",
+											"value": "<string>",
+											"description": "The genre of the book to search for"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "A list of books matching the search criteria",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "//books/search?author=<string>&published_year=<integer>&genre=<string>",
+											"path": [
+												"",
+												"books",
+												"search"
+											],
+											"query": [
+												{
+													"key": "author",
+													"value": "<string>",
+													"description": "The author of the book to search for"
+												},
+												{
+													"key": "published_year",
+													"value": "<integer>",
+													"description": "The published year of the book to search for"
+												},
+												{
+													"key": "genre",
+													"value": "<string>",
+													"description": "The genre of the book to search for"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  {\n    \"author\": \"<string>\",\n    \"genre\": \"<string>\",\n    \"isbn\": \"<string>\",\n    \"published_year\": \"<integer>\",\n    \"title\": \"<string>\"\n  },\n  {\n    \"author\": \"<string>\",\n    \"genre\": \"<string>\",\n    \"isbn\": \"<string>\",\n    \"published_year\": \"<integer>\",\n    \"title\": \"<string>\"\n  }\n]"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "{isbn}",
+					"item": [
+						{
+							"name": "Delete a book by ISBN.",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books/:isbn",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										":isbn"
+									],
+									"variable": [
+										{
+											"key": "isbn",
+											"value": "<string>",
+											"description": "(Required) The ISBN of the book to delete"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Book deleted successfully",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "//books/:isbn",
+											"path": [
+												"",
+												"books",
+												":isbn"
+											],
+											"variable": [
+												{
+													"key": "isbn"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Book not found",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/books/:isbn",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"books",
+												":isbn"
+											],
+											"variable": [
+												{
+													"key": "isbn"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Update a book's information by ISBN.",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"author\": \"<string>\",\n  \"genre\": \"<string>\",\n  \"published_year\": \"<integer>\",\n  \"title\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/:isbn",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										":isbn"
+									],
+									"variable": [
+										{
+											"key": "isbn",
+											"value": "<string>",
+											"description": "(Required) The ISBN of the book to update"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Book updated successfully",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"author\": \"<string>\",\n  \"genre\": \"<string>\",\n  \"published_year\": \"<integer>\",\n  \"title\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "//books/:isbn",
+											"path": [
+												"",
+												"books",
+												":isbn"
+											],
+											"variable": [
+												{
+													"key": "isbn"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Book not found",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"author\": \"<string>\",\n  \"genre\": \"<string>\",\n  \"published_year\": \"<integer>\",\n  \"title\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/books/:isbn",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"books",
+												":isbn"
+											],
+											"variable": [
+												{
+													"key": "isbn"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "List all books in the collection.",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/books",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "A list of all books",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "//books",
+									"path": [
+										"",
+										"books"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"author\": \"<string>\",\n    \"genre\": \"<string>\",\n    \"isbn\": \"<string>\",\n    \"published_year\": \"<integer>\",\n    \"title\": \"<string>\"\n  },\n  {\n    \"author\": \"<string>\",\n    \"genre\": \"<string>\",\n    \"isbn\": \"<string>\",\n    \"published_year\": \"<integer>\",\n    \"title\": \"<string>\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Add a new book to the collection.",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author\": \"<string>\",\n  \"genre\": \"<string>\",\n  \"isbn\": \"<string>\",\n  \"published_year\": \"<integer>\",\n  \"title\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/books",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Book added successfully",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"author\": \"<string>\",\n  \"genre\": \"<string>\",\n  \"isbn\": \"<string>\",\n  \"published_year\": \"<integer>\",\n  \"title\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "//books",
+									"path": [
+										"",
+										"books"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Missing required fields or book already exists",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"author\": \"<string>\",\n  \"genre\": \"<string>\",\n  \"isbn\": \"<string>\",\n  \"published_year\": \"<integer>\",\n  \"title\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/"
+		}
+	]
+}
